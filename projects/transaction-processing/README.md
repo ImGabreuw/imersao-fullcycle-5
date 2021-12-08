@@ -1,10 +1,14 @@
+[<img src="../img/golang.svg" width="36"/>](Golang)
+
 # transaction-processing
 
-### Rodar os testes
+## Descrição
 
-```bash
-$ go test ./...
-```
+Repositório do back-end de processamento das transações feito com Golang
+
+**Importante**: A aplicação do Apache Kafka deve estar rodando primeiro.
+
+## Execução da aplicação
 
 ### Criar banco de dados
 
@@ -42,6 +46,12 @@ Execute os comandos:
 
 ```
 docker-compose up
+```
+
+### Rodar os testes
+
+```bash
+$ go test ./...
 ```
 
 ### Entrar no _Topic_ "transactions" como _Producer_
