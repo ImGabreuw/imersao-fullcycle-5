@@ -4,8 +4,9 @@ import (
 	"database/sql"
 	"encoding/json"
 	ckafka "github.com/confluentinc/confluent-kafka-go/kafka"
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/go-sql-driver/mysql"
 	"log"
+	"os"
 	"transaction-processing/adapter/broker/kafka"
 	"transaction-processing/adapter/factory"
 	"transaction-processing/adapter/presenter/transaction"
@@ -14,7 +15,7 @@ import (
 
 func main() {
 	// db
-	db, err := sql.Open("sqlite3", "test.db")
+	db, err := sql.Open("mysql", os.Getenv("MYSQL_USERNAME")+":"+os.Getenv("MYSQL_PASSWORD")+"@tcp("+os.Getenv("MYSQL_HOST")+":3306)/"+os.Getenv("MYSQL_DATABASE"))
 
 	if err != nil {
 		log.Fatal(err)
@@ -26,7 +27,11 @@ func main() {
 
 	// configMapProducer
 	configMapProducer := &ckafka.ConfigMap{
-		"bootstrap.servers": "kafka:9092",
+		"bootstrap.servers": os.Getenv("BOOTSTRAP_SERVERS"),
+		"security.protocol": os.Getenv("SECURITY_PROTOCOL"),
+		"sasl.mechanisms":   os.Getenv("SASL_MECHANISMS"),
+		"sasl.username":     os.Getenv("SASL_USERNAME"),
+		"sasl.password":     os.Getenv("SASL_PASSWORD"),
 	}
 
 	// producer
@@ -37,7 +42,11 @@ func main() {
 
 	// configMapConsumer
 	configMapConsumer := &ckafka.ConfigMap{
-		"bootstrap.servers": "kafka:9092",
+		"bootstrap.servers": os.Getenv("BOOTSTRAP_SERVERS"),
+		"security.protocol": os.Getenv("SECURITY_PROTOCOL"),
+		"sasl.mechanisms":   os.Getenv("SASL_MECHANISMS"),
+		"sasl.username":     os.Getenv("SASL_USERNAME"),
+		"sasl.password":     os.Getenv("SASL_PASSWORD"),
 		"client.id":         "goapp",
 		"group.id":          "goapp",
 	}
